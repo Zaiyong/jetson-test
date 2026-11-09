@@ -1,0 +1,56 @@
+[project]
+name = "yolo-camera-bench"
+version = "0.1.0"
+description = "YOLO11 person detection camera benchmark: laptop (OpenVINO) vs Jetson (TensorRT) vs gaming PC (TensorRT)"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "ultralytics>=8.3.0",
+    "opencv-python>=4.9,<5",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+]
+
+[project.optional-dependencies]
+# Lenovo L14, CPU only -> OpenVINO
+laptop = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "openvino>=2024.6",
+]
+# Gaming PC, RTX 3060 Ti -> TensorRT engine
+gamingpc = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+    "tensorrt-cu12>=10.3,!=10.1.0",
+    "onnx>=1.12",
+    "onnxslim>=0.1.46",
+]
+# Jetson is NOT installed via extras: it needs the JetPack TensorRT (system site-packages)
+# and NVIDIA-built torch wheels. See the setup notes in benchmark.py.
+
+[tool.uv]
+conflicts = [[{ extra = "laptop" }, { extra = "gamingpc" }]]
+environments = [
+    "sys_platform == 'win32'",
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", extra = "laptop" },
+    { index = "pytorch-cu126", extra = "gamingpc" },
+]
+torchvision = [
+    { index = "pytorch-cpu", extra = "laptop" },
+    { index = "pytorch-cu126", extra = "gamingpc" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true

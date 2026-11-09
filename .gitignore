@@ -1,0 +1,28 @@
+# Python / uv virtual environments (each device builds its own)
+.venv/
+.venv-jetson/
+__pycache__/
+*.py[cod]
+
+# Model weights and exported models (large; TensorRT engines are device specific)
+models/
+*.pt
+*.onnx
+*.engine
+*.cache
+*_openvino_model/
+
+# Ultralytics side outputs (INT8 calibration dataset, runs)
+datasets/
+runs/
+
+# Generated analysis report (re-create with analyze.py)
+report/
+
+# results/ is tracked on purpose: push the CSV/JSON from every device, then analyze in one place
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
