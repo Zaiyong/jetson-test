@@ -1,0 +1,77 @@
+{
+  "run_id": "jetson_cam2_yolo11x_engine_fp16_640_20261109_233530",
+  "args": {
+    "computer": "jetson",
+    "list_cameras": false,
+    "max_index": 10,
+    "n_camera": 2,
+    "cameras": "0,2",
+    "model": "yolo11x",
+    "format": "engine",
+    "precision": "fp16",
+    "device": "0",
+    "int8_data": "coco8.yaml",
+    "imgsz": 640,
+    "conf": 0.25,
+    "duration": 60.0,
+    "warmup": 30,
+    "width": 1280,
+    "height": 720,
+    "cam_fps": 30,
+    "cam_api": "v4l2",
+    "no_mjpg": false,
+    "models_dir": "models",
+    "results_dir": "results",
+    "tag": "",
+    "force_export": false,
+    "sources": [
+      "0",
+      "2"
+    ]
+  },
+  "model": {
+    "pt_path": "models/yolo11x.pt",
+    "download_s": null,
+    "export_s": null,
+    "export_cached": true,
+    "model_path": "models/jetson/yolo11x_640_fp16.engine"
+  },
+  "system": {
+    "hostname": "zaiyong",
+    "platform": "Linux-6.8.12-1021-tegra-aarch64-with-glibc2.39",
+    "machine": "aarch64",
+    "python": "3.12.3",
+    "opencv": "4.14.0",
+    "cpu_count": 6,
+    "ultralytics": "8.4.208",
+    "cpu": "aarch64",
+    "torch": "2.15.0+cu132",
+    "cuda_available": true,
+    "gpu": "Orin",
+    "cuda": "13.2",
+    "tensorrt": "10.16.1.11",
+    "nv_tegra_release": "# R39 (release), REVISION: 2.1, GCID: 46758480, BOARD: generic, EABI: aarch64, DATE: Fri Aug  7 05:54:22 AM UTC 2026"
+  },
+  "cameras": [
+    {
+      "source": "0",
+      "width": 1280,
+      "height": 720,
+      "fps": 30.0,
+      "fourcc": "MJPG",
+      "open_ms": 475.3,
+      "load_ms": 3286.0,
+      "dropped": 0
+    },
+    {
+      "source": "2",
+      "width": 1280,
+      "height": 720,
+      "fps": 30.0,
+      "fourcc": "MJPG",
+      "open_ms": 474.7,
+      "load_ms": 345.8,
+      "dropped": 0
+    }
+  ]
+}
