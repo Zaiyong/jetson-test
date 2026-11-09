@@ -24,6 +24,7 @@ gamingpc = [
     "tensorrt-cu12>=10.3,!=10.1.0",
     "onnx>=1.12",
     "onnxslim>=0.1.46",
+    "nvidia-modelopt[onnx]>=0.44",
 ]
 # Jetson is NOT installed via extras: it needs the JetPack TensorRT (system site-packages)
 # and NVIDIA-built torch wheels. See the setup notes in benchmark.py.

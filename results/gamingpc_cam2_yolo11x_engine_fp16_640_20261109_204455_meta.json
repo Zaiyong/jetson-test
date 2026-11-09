@@ -1,0 +1,76 @@
+{
+  "run_id": "gamingpc_cam2_yolo11x_engine_fp16_640_20261109_204455",
+  "args": {
+    "computer": "gamingpc",
+    "list_cameras": false,
+    "max_index": 10,
+    "n_camera": 2,
+    "cameras": "0,1",
+    "model": "yolo11x",
+    "format": "engine",
+    "precision": "fp16",
+    "device": "0",
+    "int8_data": "coco8.yaml",
+    "imgsz": 640,
+    "conf": 0.25,
+    "duration": 60.0,
+    "warmup": 30,
+    "width": 1280,
+    "height": 720,
+    "cam_fps": 30,
+    "cam_api": "msmf",
+    "no_mjpg": false,
+    "models_dir": "models",
+    "results_dir": "results",
+    "tag": "",
+    "force_export": false,
+    "sources": [
+      "0",
+      "1"
+    ]
+  },
+  "model": {
+    "pt_path": "models\\yolo11x.pt",
+    "download_s": null,
+    "export_s": null,
+    "export_cached": true,
+    "model_path": "models\\gamingpc\\yolo11x_640_fp16.engine"
+  },
+  "system": {
+    "hostname": "DESKTOP-F4A6BKO",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "machine": "AMD64",
+    "python": "3.12.12",
+    "opencv": "4.14.0",
+    "cpu_count": 16,
+    "ultralytics": "8.4.208",
+    "cpu": "AMD Ryzen 7 5700G with Radeon Graphics",
+    "torch": "2.14.1+cu126",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 3060 Ti",
+    "cuda": "12.6",
+    "tensorrt": "11.4.0.106"
+  },
+  "cameras": [
+    {
+      "source": "0",
+      "width": 1280,
+      "height": 720,
+      "fps": 30.0,
+      "fourcc": "\u0016\u0000\u0000\u0000",
+      "open_ms": 814.1,
+      "load_ms": 2491.3,
+      "dropped": 0
+    },
+    {
+      "source": "1",
+      "width": 1280,
+      "height": 720,
+      "fps": 30.0,
+      "fourcc": "\u0016\u0000\u0000\u0000",
+      "open_ms": 452.4,
+      "load_ms": 370.1,
+      "dropped": 0
+    }
+  ]
+}

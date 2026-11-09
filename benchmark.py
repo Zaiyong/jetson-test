@@ -7,7 +7,7 @@ Usage examples
   uv run benchmark.py --list-cameras                                   (find USB camera indices)
   uv run benchmark.py --computer laptop   --n_camera 1 --cameras 2
   uv run benchmark.py --computer laptop   --n_camera 2 --cameras 2,3 --duration 60
-  uv run benchmark.py --computer gamingpc --n_camera 3
+  uv run --extra gamingpc benchmark.py --computer gamingpc --n_camera 3
   python benchmark.py --computer jetson   --n_camera 3 --cameras 0,2,4      (inside the Jetson venv)
 
 Default backend per computer (override with --format / --precision / --device)
@@ -216,10 +216,10 @@ def list_cameras(args):
 
 # --------------------------------------------------------------------------- worker (one per camera)
 class CameraWorker(threading.Thread):
-    def __init__(self, cam_idx, src, model_path, args, barrier, setup_lock, clock):
+    def __init__(self, cam_idx, src, model_path, args, barrier, startup_barrier, setup_lock, clock):
         super().__init__(name=f"cam{cam_idx}", daemon=True)
         self.cam_idx, self.src, self.model_path, self.args = cam_idx, src, model_path, args
-        self.barrier, self.setup_lock, self.clock = barrier, setup_lock, clock
+        self.barrier, self.startup_barrier, self.setup_lock, self.clock = barrier, startup_barrier, setup_lock, clock
         self.records: list[tuple] = []  # raw perf_counter based records
         self.cam_props: dict = {}
         self.load_ms = None
@@ -232,6 +232,7 @@ class CameraWorker(threading.Thread):
         except BaseException as e:  # noqa: BLE001 - reported by main thread
             self.error = e
             self.barrier.abort()
+            self.startup_barrier.abort()
 
     def _run(self):
         from ultralytics import YOLO
@@ -257,6 +258,7 @@ class CameraWorker(threading.Thread):
                       f"camera delivers {props['width']}x{props['height']}")
 
         try:
+            self.startup_barrier.wait(timeout=900)  # finish TensorRT context/graph setup before concurrent inference
             for i in range(a.warmup):
                 self._step("warmup", i)
             self.barrier.wait(timeout=900)  # all cameras start measuring at the same moment
@@ -336,8 +338,12 @@ def main():
 
     clock = {}
     barrier = threading.Barrier(args.n_camera, action=lambda: clock.__setitem__("origin", time.perf_counter()))
+    startup_barrier = threading.Barrier(args.n_camera)
     setup_lock = threading.Lock()
-    workers = [CameraWorker(i, s, model_path, args, barrier, setup_lock, clock) for i, s in enumerate(args.sources)]
+    workers = [
+        CameraWorker(i, s, model_path, args, barrier, startup_barrier, setup_lock, clock)
+        for i, s in enumerate(args.sources)
+    ]
     for w in workers:
         w.start()
     for w in workers:

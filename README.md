@@ -44,7 +44,7 @@ uv sync --extra laptop
 
 ```powershell
 uv sync --extra gamingpc
-uv run python -c "import torch, tensorrt; print(torch.cuda.is_available(), torch.cuda.get_device_name(0), tensorrt.__version__)"
+uv run --extra gamingpc python -c "import torch, tensorrt; print(torch.cuda.is_available(), torch.cuda.get_device_name(0), tensorrt.__version__)"
 ```
 
 - 需要支持 CUDA 12.6 的 NVIDIA 驱动。
@@ -77,7 +77,7 @@ python -c "import torch, tensorrt; print(torch.cuda.is_available(), tensorrt.__v
 
 ## 3. 运行测试
 
-Laptop / Gaming PC 用 `uv run benchmark.py ...`；Jetson 先 `source .venv-jetson/bin/activate`，再用 `python benchmark.py ...`。
+Laptop 用 `uv run benchmark.py ...`；Gaming PC 用 `uv run --extra gamingpc benchmark.py ...`；Jetson 先 `source .venv-jetson/bin/activate`，再用 `python benchmark.py ...`。
 
 ### 0. 找到 USB 摄像头编号 + 设置分辨率
 
@@ -116,7 +116,7 @@ v4l2-ctl --list-devices          # Linux：每个 USB 摄像头通常占 2 个�
 
 ```powershell
 uv run benchmark.py --computer laptop --n_camera 1 --cameras 1
-uv run benchmark.py --computer gamingpc --n_camera 1 --cameras 0
+uv run --extra gamingpc benchmark.py --computer gamingpc --n_camera 1 --cameras 0
 ```
 
 ```bash
@@ -127,7 +127,7 @@ python benchmark.py --computer jetson --n_camera 1 --cameras 0
 
 ```powershell
 uv run benchmark.py --computer laptop --n_camera 2 --cameras 1,2
-uv run benchmark.py --computer gamingpc --n_camera 2 --cameras 0,1
+uv run --extra gamingpc benchmark.py --computer gamingpc --n_camera 2 --cameras 0,1
 ```
 
 ```bash
@@ -144,10 +144,10 @@ uv run benchmark.py --computer laptop --n_camera 2 --cameras 1,2 --width 1920 --
 uv run benchmark.py --computer laptop --n_camera 1 --model yolo11m
 
 # INT8（需要校准数据，默认 coco8.yaml，会自动下载）
-uv run benchmark.py --computer gamingpc --n_camera 1 --precision int8
+uv run --extra gamingpc benchmark.py --computer gamingpc --n_camera 1 --precision int8
 
 # 用 PyTorch .pt 作对照
-uv run benchmark.py --computer gamingpc --n_camera 1 --format pt
+uv run --extra gamingpc benchmark.py --computer gamingpc --n_camera 1 --format pt
 
 # 用视频文件代替摄像头（不受摄像头帧率限制）
 uv run benchmark.py --computer laptop --n_camera 1 --cameras D:\videos\people.mp4
